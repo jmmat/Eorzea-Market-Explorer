@@ -9,23 +9,24 @@
     <h1>Eorzea Market Explorer</h1>
 
     <div class="container">
-        <div class="container-item">
-            <form action="/search" method="get">
-                <input type="text" id="input-query" name="input-query" placeholder="Search for an item...">
-            </form>
-        </div>
-        <div class="container-item">
-            <input type="submit" id="submit-button" value="Submit">
-        </div>
-        <div class="container-item">
-            <select name="world" id="world">
-                <option value="Aether">Aether</option>
-                <option value="Leviathan">Leviathan</option>
-            </select>
-        </div>
-        {% if searched_item %}
+        <form class="search-form" action="/search" method="get">
             <div class="container-item">
-                <p>You searched for: {{searched_item}}</p>
+                <input type="text" id="input-query" name="input-query" placeholder="Search for an item...">
+            </div>
+            <div class="container-item">
+                <input type="submit" id="submit-button" value="Submit">
+            </div>
+            <div class="container-item">
+                <select name="world" id="world">
+                    <option value="Aether">Leviathan</option>
+                    <option value="Leviathan">Aether</option>
+                </select>
+            </div>
+        </form>
+        {% if searched_item and searched_world %}
+            <div class="container-item">
+                <img class="item-icon" src="{{item_icon_url}}" alt="{{searched_item}}">
+                <p>You searched for: {{searched_item}} on {{searched_world}}</p>
             </div>
         {% endif %}
     </div>
