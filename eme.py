@@ -52,5 +52,9 @@ def search():
                            item_current_listings=item_current_listings
                            )
 
+@app.route("/expand-results")
+def expand_results():
+    return "Flask received the request!"
+
 if __name__ == "__main__":
     app.run()

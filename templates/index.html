@@ -105,7 +105,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="sale-history-section">
+                    <div class="sale-history-section" data-item="{{searched_item}}" data-world="{{searched_world}}">
                         <h3 class="search-results-header">Sale History</h3>
                         <table>
                             <thead>
@@ -137,11 +137,12 @@
                             </tbody>
                         </table>
 
-
+                        <button id="expand-history-results">▼ Expand Results</button>
                         
                     </div>
                 </div>
             {% endif %}
     </div>
+    <script src="../static/script.js"></script>
 </body>
 </html>
