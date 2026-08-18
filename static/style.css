@@ -3,6 +3,11 @@ h1 {
   font-size: 3.5rem;
 }
 
+td, th {
+  border: 1px solid black;
+  padding: 5px 10px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -13,6 +18,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
 }
 
 .search-form {
@@ -21,9 +27,33 @@ h1 {
   gap: 30px;
 }
 
+.search-header {
+  font-size: x-large;
+}
+
+.search-results-header {
+  font-size: x-large;
+  text-align: center;
+  text-decoration: underline;
+}
+
 .item-icon {
   height: 3rem;
   width: 3rem;
+}
+
+.item-data-section {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+}
+
+.current-listings-section,
+.sale-history-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 #input-query {

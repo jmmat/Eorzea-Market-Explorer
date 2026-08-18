@@ -18,17 +18,130 @@
             </div>
             <div class="container-item">
                 <select name="world" id="world">
-                    <option value="Aether">Leviathan</option>
-                    <option value="Leviathan">Aether</option>
+                    {% set worlds = [
+                        "Leviathan",
+                        "Primal",
+                        "Behemoth",
+                        "Excalibur",
+                        "Exodus",
+                        "Famfrit",
+                        "Hyperion",
+                        "Lamia",
+                        "Ultros",
+                        "Aether",
+                        "Adamantoise",
+                        "Cactuar",
+                        "Faerie",
+                        "Gilgamesh",
+                        "Jenova",
+                        "Midgardsormr",
+                        "Sargatanas",
+                        "Siren",
+                        "Crystal",
+                        "Balmung",
+                        "Brynhildr",
+                        "Coeurl",
+                        "Diabolos",
+                        "Goblin",
+                        "Malboro",
+                        "Mateus",
+                        "Zalera",
+                        "Dynamis",
+                        "Cuchulainn",
+                        "Halicarnassus",
+                        "Kraken",
+                        "Maduin",
+                        "Marilith",
+                        "Rafflesia",
+                        "Seraph"
+                        ] %}
+                    {% if searched_world %}
+                        <option value="{{searched_world}}">{{searched_world}}</option>
+                    {% endif %}
+                    {% for world in worlds %}
+                        {% if world != searched_world %}
+                            <option value="{{world}}">{{world}}</option>
+                        {% endif %}
+                    {% endfor %}
                 </select>
             </div>
         </form>
-        {% if searched_item and searched_world %}
-            <div class="container-item">
-                <img class="item-icon" src="{{item_icon_url}}" alt="{{searched_item}}">
-                <p>You searched for: {{searched_item}} on {{searched_world}}</p>
-            </div>
-        {% endif %}
+            {% if failed_search %} 
+                <div class="container-item">
+                    <h2 class="search-header">Couldn't find any results for: {{searched_item}}</h2>
+                </div>
+            {% elif searched_item and searched_world %}
+                <div class="container-item">
+                    <img class="item-icon" src="{{item_icon_url}}" alt="{{searched_item}}">
+                    <h2 class="search-header">{{searched_item}} ({{searched_world}})</h2>
+                </div>
+                <div class="item-data-section">
+                    <div class="current-listings-section">
+                        <h3 class="search-results-header">Current Listings</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>HQ</th>
+                                    <th>Seller Name</th>
+                                    {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                        <th>World</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for listing in item_current_listings %}
+                                <tr>
+                                    <td>{{listing["pricePerUnit"]}}</td>
+                                    <td>{{listing["quantity"]}}</td>
+                                    <td>{{listing["hq"]}}</td>
+                                    <td>{{listing["retainerName"]}}</td>
+                                    {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                        <td>{{listing["worldName"]}}</td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="sale-history-section">
+                        <h3 class="search-results-header">Sale History</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>HQ</th>
+                                    <th>Date/Time</th>
+                                    <th>Buyer Name</th>
+                                    {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                        <th>World</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for purchase in item_recent_history %}
+                                    <tr>
+                                        <td>{{purchase["pricePerUnit"]}}</td>
+                                        <td>{{purchase["quantity"]}}</td>
+                                        <td>{{purchase["hq"]}}</td>
+                                        <td>{{purchase["timestamp"]}}</td>
+                                        <td>{{purchase["buyerName"]}}</td>
+                                        {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                            <td>{{purchase["worldName"]}}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                        
+                    </div>
+                </div>
+            {% endif %}
     </div>
 </body>
 </html>
