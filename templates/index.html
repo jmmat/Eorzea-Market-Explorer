@@ -66,7 +66,15 @@
                 </select>
             </div>
         </form>
-            {% if failed_search %} 
+            {% if timeout%}
+                <div class="container-item">
+                    <h2 class="search-header">Search timed out, try again in a second</h2>
+                </div>
+            {% elif search_error %}
+                <div class="container-item">
+                    <h2 class="search-header">There was an error. Code: {{status_code}}</h2>
+                </div>
+            {% elif failed_search %} 
                 <div class="container-item">
                     <h2 class="search-header">Couldn't find any results for: {{searched_item}}</h2>
                 </div>
@@ -105,7 +113,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="sale-history-section" data-item="{{searched_item}}" data-world="{{searched_world}}">
+                    <div class="sale-history-section" data-item="{{searched_item}}" data-item-id="{{item_id}}" data-world="{{searched_world}}">
                         <h3 class="search-results-header">Sale History</h3>
                         <table>
                             <thead>
@@ -121,7 +129,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="sale-history-body">
                                 {% for purchase in item_recent_history %}
                                     <tr>
                                         <td>{{purchase["pricePerUnit"]}}</td>
@@ -138,7 +146,7 @@
                         </table>
 
                         <button id="expand-history-results">▼ Expand Results</button>
-                        
+                        <p id="expanded-search-error-message"></p>
                     </div>
                 </div>
             {% endif %}
