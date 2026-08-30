@@ -28,9 +28,9 @@ def search():
     if not searched_item:
         return render_template("index.html", searched_world=searched_world)
     
-    ffxivapi_response_data = requests.get("https://v2.xivapi.com/api/search", params={"query": f'Name="{searched_item}"', "sheets": ["Item"]}).json()
+    ffxivapi_response_data = requests.get("https://v2.xivapi.com/api/search", params={"query": f'Name~"{searched_item}"', "sheets": ["Item"]}).json()
     if not ffxivapi_response_data["results"]:
-        return render_template("index.html", failed_search=True, searched_item=searched_item, searched_world=searched_world)
+        return render_template("index.html", failed_search=True, searched_item=searched_item.title(), searched_world=searched_world)
     
     item_id = ffxivapi_response_data["results"][0]["row_id"]
     try:
@@ -58,7 +58,7 @@ def search():
     format_time(item_recent_history)
     
     return render_template("index.html", 
-                           searched_item=searched_item, searched_world=searched_world, 
+                           searched_item=searched_item.title(), searched_world=searched_world, 
                            item_icon_url=item_icon_url, item_recent_history=item_recent_history,
                            item_current_listings=item_current_listings, item_id=item_id
                            )
