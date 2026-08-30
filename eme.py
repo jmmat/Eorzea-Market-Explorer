@@ -58,7 +58,7 @@ def search():
     format_time(item_recent_history)
     
     return render_template("index.html", 
-                           searched_item=searched_item.title(), searched_world=searched_world, 
+                           searched_item=ffxivapi_response_data["results"][0]["fields"]["Name"], searched_world=searched_world, 
                            item_icon_url=item_icon_url, item_recent_history=item_recent_history,
                            item_current_listings=item_current_listings, item_id=item_id
                            )
