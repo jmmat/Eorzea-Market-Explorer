@@ -25,7 +25,12 @@ if(expandButton){
                 }
                 console.log(data);
 
+                const dataCenters = ["Aether", "Primal", "Crystal", "Dynamis"];
                 const fields = ["pricePerUnit", "quantity", "hq", "timestamp", "buyerName"];
+
+                if(dataCenters.includes(world)) {
+                    fields.push("worldName");
+                }
 
                 for(let i = 5; i < data["recentHistory"].length; i++) {
                     const row = document.createElement("tr");
@@ -36,6 +41,7 @@ if(expandButton){
                         cell.textContent = data["recentHistory"][i][field];
                         row.appendChild(cell);
                     }
+
 
                     saleHistoryBody.appendChild(row);
                 }
