@@ -247,9 +247,6 @@ def random_item():
 
 @app.route("/flash-test")
 def flash_test():
-    use_isolation = request.args.get("isolate") == "1"
-
-    isolation_style = "isolate" if use_isolation else "auto"
 
     return f"""
     <!DOCTYPE html>
@@ -268,7 +265,6 @@ def flash_test():
         <link rel="icon" href="/static/images/ffxivfavicon.png">
         <link rel="stylesheet" href="/static/style.css">
     </head>
-    <body style="isolation: {isolation_style};">
         <div class="background-image"></div>
 
         <h1>EME Background Test</h1>
