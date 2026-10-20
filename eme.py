@@ -249,13 +249,14 @@ def random_item():
 def flash_test():
     use_isolation = request.args.get("isolate") == "1"
 
-    isolation_style = "isolation: isolate;" if use_isolation else ""
+    isolation_style = "isolate" if use_isolation else "auto"
 
     return f"""
     <!DOCTYPE html>
     <html>
     <head>
         <meta name="color-scheme" content="dark">
+
         <style>
             html, body {{
                 margin: 0;
@@ -263,13 +264,13 @@ def flash_test():
                 background-color: #101827;
                 color: #e9eef7;
             }}
-
-            body {{
-                {isolation_style}
-            }}
         </style>
+        <link rel="icon" href="/static/images/ffxivfavicon.png">
+        <link rel="stylesheet" href="/static/style.css">
     </head>
-    <body>
+    <body style="isolation: {isolation_style};">
+        <div class="background-image"></div>
+
         <h1>EME Background Test</h1>
         <p>Testing Firefox page reloads.</p>
     </body>
