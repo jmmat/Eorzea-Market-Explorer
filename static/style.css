@@ -74,6 +74,10 @@ h2 {
   letter-spacing: 0.02em;
 }
 
+body {
+  background-color: var(--eme-navy);
+}
+
 td, th {
   padding: 5px 10px;
   color: var(--eme-text);
@@ -319,3 +323,4 @@ th {
     background-color: var(--eme-gold);
     transform: rotate(45deg);
 }
+
