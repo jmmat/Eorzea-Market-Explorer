@@ -260,6 +260,7 @@ def flash_test():
                 color: #e9eef7;
             }
         </style>
+        <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
         <h1>EME Background Test</h1>
