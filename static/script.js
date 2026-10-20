@@ -1,4 +1,5 @@
 const expandButton = document.getElementById("expand-history-results");
+const randomItemButton = document.getElementById("random-item-button");
 let expanded = false;
 
 if(expandButton){
@@ -59,5 +60,11 @@ if(expandButton){
             expandButton.textContent = "▼ Expand Results";
             expanded = false;
         }
+    });
+}
+
+if (randomItemButton) {
+    randomItemButton.addEventListener("click", () => {
+        window.location.href = "/random";
     });
 }

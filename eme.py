@@ -2,8 +2,73 @@ from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import requests
+import random
 
 app = Flask(__name__)
+
+marketable_item_ids = []
+random_item_available = False
+WORLDS = [
+    "Leviathan",
+    "Primal",
+    "Behemoth",
+    "Excalibur",
+    "Exodus",
+    "Famfrit",
+    "Hyperion",
+    "Lamia",
+    "Ultros",
+    "Aether",
+    "Adamantoise",
+    "Cactuar",
+    "Faerie",
+    "Gilgamesh",
+    "Jenova",
+    "Midgardsormr",
+    "Sargatanas",
+    "Siren",
+    "Crystal",
+    "Balmung",
+    "Brynhildr",
+    "Coeurl",
+    "Diabolos",
+    "Goblin",
+    "Malboro",
+    "Mateus",
+    "Zalera",
+    "Dynamis",
+    "Cuchulainn",
+    "Halicarnassus",
+    "Kraken",
+    "Maduin",
+    "Marilith",
+    "Rafflesia",
+    "Seraph"
+    ]
+
+@app.context_processor
+def inject_random_item_status():
+    return {
+        "random_item_available": random_item_available,
+        "worlds": WORLDS
+    }
+
+
+
+try:
+    response = requests.get(
+        "https://universalis.app/api/v2/marketable",
+        timeout=10
+    )
+    response.raise_for_status()
+
+    marketable_item_ids = response.json()
+    random_item_available = len(marketable_item_ids) > 0
+
+except (requests.RequestException, ValueError) as error:
+    print(f"Could not load marketable items: {error}")
+
+
 
 def format_time(entries):
     for entry in entries:
@@ -16,52 +81,116 @@ def format_hq(entries):
         else:
             entry["hq"] = "NQ"
 
+
+def get_market_data(item_id, world):
+    try:
+        item_data = requests.get(
+            f"https://v2.xivapi.com/api/sheet/Item/{item_id}",
+            timeout=10
+        )
+        item_data.raise_for_status()
+        item_data = item_data.json()
+
+        item_icon_url = requests.get(
+            "https://v2.xivapi.com/api/asset",
+            params={"path": item_data["fields"]["Icon"]["path"], "format": "png"},
+            timeout=10
+        ).url
+
+        if item_data["fields"]["IsUntradable"]:
+            return {
+                "untradable": True,
+                "searched_item": item_data["fields"]["Name"],
+                "searched_world": world,
+                "item_icon_url": item_icon_url,
+            }
+
+        universalis_response = requests.get(
+            f"https://universalis.app/api/v2/{world}/{item_id}",
+            timeout=10
+        )
+
+        if universalis_response.status_code != 200:
+            return {
+                "search_error": True,
+                "status_code": universalis_response.status_code,
+            }
+
+        universalis_data = universalis_response.json()
+
+        item_recent_history = universalis_data["recentHistory"]
+        item_current_listings = universalis_data["listings"]
+
+        format_hq(item_recent_history)
+        format_hq(item_current_listings)
+        format_time(item_recent_history)
+
+        return {
+            "searched_item": item_data["fields"]["Name"],
+            "searched_world": world,
+            "item_icon_url": item_icon_url,
+            "item_recent_history": item_recent_history,
+            "item_current_listings": item_current_listings,
+            "item_id": item_id,
+        }
+
+    except requests.exceptions.Timeout:
+        return {"timeout": True}
+
+    except requests.exceptions.RequestException as error:
+        print(f"API request failed: {error}")
+        return {"search_error": True}
+
+
 @app.route("/")
 def home():
     return render_template("index.html")
 
+
 @app.route("/search")
 def search():
-    searched_item = request.args["input-query"]
-    searched_world = request.args["world"]
-    
+    searched_item = request.args.get("input-query", "")
+    searched_world = request.args.get("world", "")
+
     if not searched_item:
-        return render_template("index.html", searched_world=searched_world)
-    
-    ffxivapi_response_data = requests.get("https://v2.xivapi.com/api/search", params={"query": f'Name~"{searched_item}"', "sheets": ["Item"]}).json()
-    if not ffxivapi_response_data["results"]:
-        return render_template("index.html", failed_search=True, searched_item=searched_item.title(), searched_world=searched_world)
-    
-    item_id = ffxivapi_response_data["results"][0]["row_id"]
+        return render_template(
+            "index.html",
+            searched_world=searched_world
+        )
+
     try:
-        universalis_response = requests.get(f"https://universalis.app/api/v2/{searched_world}/{item_id}", timeout=10)
+        response = requests.get(
+            "https://v2.xivapi.com/api/search",
+            params={
+                "query": f'Name~"{searched_item}"',
+                "sheets": ["Item"]
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        ffxivapi_response_data = response.json()
+
     except requests.exceptions.Timeout:
         return render_template("index.html", timeout=True)
-        
-    
-    print("Status: ", universalis_response.status_code)
 
-    if universalis_response.status_code != 200:
-        return render_template("index.html", search_error=True, status_code=universalis_response.status_code)
-    
-    universalis_response = universalis_response.json()
-    
-    icon_path = ffxivapi_response_data["results"][0]["fields"]["Icon"]["path"]
-    item_icon_url = requests.get(f"https://v2.xivapi.com/api/asset", params={"path": icon_path, "format": "png"}).url
-    
-    item_recent_history = universalis_response["recentHistory"]
-    item_current_listings = universalis_response["listings"]
-    
-    format_hq(item_recent_history)
-    format_hq(item_current_listings)
-    
-    format_time(item_recent_history)
-    
-    return render_template("index.html", 
-                           searched_item=ffxivapi_response_data["results"][0]["fields"]["Name"], searched_world=searched_world, 
-                           item_icon_url=item_icon_url, item_recent_history=item_recent_history,
-                           item_current_listings=item_current_listings, item_id=item_id
-                           )
+    except requests.exceptions.RequestException as error:
+        print(f"XIVAPI search failed: {error}")
+        return render_template("index.html", search_error=True)
+
+    if not ffxivapi_response_data["results"]:
+        return render_template(
+            "index.html",
+            failed_search=True,
+            searched_item=searched_item.title(),
+            searched_world=searched_world
+        )
+
+    item_id = ffxivapi_response_data["results"][0]["row_id"]
+
+    result = get_market_data(item_id, searched_world)
+
+    return render_template("index.html", **result)
+
 
 @app.route("/expand-results")
 def expand_results():
@@ -91,6 +220,20 @@ def expand_results():
         
     
     return jsonify(expanded_search)
+
+
+
+@app.route("/random")
+def random_item():
+    random_item_id = random.choice(marketable_item_ids)
+    random_world = random.choice(WORLDS)
+
+    result = get_market_data(random_item_id, random_world)
+
+    return render_template("index.html", **result)
+
+
+
 
 if __name__ == "__main__":
     app.run()

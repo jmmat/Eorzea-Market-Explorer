@@ -3,59 +3,45 @@
 <head>
     <title>Eorzea Market Explorer</title>
     <link rel="stylesheet" href="../static/style.css">
-    <link rel="icon" href="{{ url_for('static', filename='ffxivfavicon.png') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/ffxivfavicon.png') }}">
 </head>
 <body>
 
-    <h1>Eorzea Market Explorer</h1>
+    <div class="background-image"></div>
+    
+    <header class="site-header">
+        <img src="../static/images/ffxivmsqlogo.png" alt="Final Fantasy XIV Logo" class="site-logo">
+        <h1>Eorzea Market Explorer</h1>
+    </header>
 
-    <div class="container">
+    <section class="intro-section">
+        <h2 class="intro-section-header">Explore the Markets of Eorzea</h2>
+        <p>Search for an item to uncover its market prices, current listings, and recent sales across the realm of Final Fantasy XIV.</p>
+        {% if random_item_available %}
+            <div class="intro-divider" aria-hidden="true">
+                <span></span>
+                <span class="divider-diamond"></span>
+                <span></span>
+            </div>
+            <p>Don't know what to search for? <span class="crystal-text">Let fate decide!</span></p>
+            <button type="button" id="random-item-button">
+                Surprise Me!
+            </button>
+        {% endif %}
+    </section>
+
+    <div class="market-content">
         <form class="search-form" action="/search" method="get">
-            <div class="container-item">
+
+            <div class="search-form-header">
+                <h2>Search the Market</h2>
+            </div>
+
+
+            <div class="search-controls">
                 <input type="text" id="input-query" name="input-query" placeholder="Search for an item...">
-            </div>
-            <div class="container-item">
-                <input type="submit" id="submit-button" value="Submit">
-            </div>
-            <div class="container-item">
+
                 <select name="world" id="world">
-                    {% set worlds = [
-                        "Leviathan",
-                        "Primal",
-                        "Behemoth",
-                        "Excalibur",
-                        "Exodus",
-                        "Famfrit",
-                        "Hyperion",
-                        "Lamia",
-                        "Ultros",
-                        "Aether",
-                        "Adamantoise",
-                        "Cactuar",
-                        "Faerie",
-                        "Gilgamesh",
-                        "Jenova",
-                        "Midgardsormr",
-                        "Sargatanas",
-                        "Siren",
-                        "Crystal",
-                        "Balmung",
-                        "Brynhildr",
-                        "Coeurl",
-                        "Diabolos",
-                        "Goblin",
-                        "Malboro",
-                        "Mateus",
-                        "Zalera",
-                        "Dynamis",
-                        "Cuchulainn",
-                        "Halicarnassus",
-                        "Kraken",
-                        "Maduin",
-                        "Marilith",
-                        "Rafflesia",
-                        "Seraph"
-                        ] %}
                     {% if searched_world %}
                         <option value="{{searched_world}}">{{searched_world}}</option>
                     {% endif %}
@@ -65,92 +51,106 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-            </div>
-        </form>
-            {% if timeout%}
-                <div class="container-item">
-                    <h2 class="search-header">Search timed out, try again in a second</h2>
-                </div>
-            {% elif search_error %}
-                <div class="container-item">
-                    <h2 class="search-header">There was an error. Code: {{status_code}}</h2>
-                </div>
-            {% elif failed_search %} 
-                <div class="container-item">
-                    <h2 class="search-header">Couldn't find any results for: {{searched_item}}</h2>
-                </div>
-            {% elif searched_item and searched_world %}
-                <div class="container-item">
-                    <img class="item-icon" src="{{item_icon_url}}" alt="{{searched_item}}">
-                    <h2 class="search-header">{{searched_item}} ({{searched_world}})</h2>
-                </div>
-                <div class="item-data-section">
-                    <div class="current-listings-section">
-                        <h3 class="search-results-header">Current Listings</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>HQ</th>
-                                    <th>Seller Name</th>
-                                    {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                        <th>World</th>
-                                    {% endif %}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for listing in item_current_listings %}
-                                <tr>
-                                    <td>{{listing["pricePerUnit"]}}</td>
-                                    <td>{{listing["quantity"]}}</td>
-                                    <td>{{listing["hq"]}}</td>
-                                    <td>{{listing["retainerName"]}}</td>
-                                    {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                        <td>{{listing["worldName"]}}</td>
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="sale-history-section" data-item="{{searched_item}}" data-item-id="{{item_id}}" data-world="{{searched_world}}">
-                        <h3 class="search-results-header">Sale History</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>HQ</th>
-                                    <th>Date/Time</th>
-                                    <th>Buyer Name</th>
-                                    {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                        <th>World</th>
-                                    {% endif %}
-                                </tr>
-                            </thead>
 
-                            <tbody id="sale-history-body">
-                                {% for purchase in item_recent_history %}
+                <button type="submit" id="submit-button">Search Market ↗</button>
+
+            </div>
+
+        </form>
+        {% if timeout or search_error or failed_search or (searched_item and searched_world) %}
+            <div class="item-data-section">
+                {% if timeout %}
+                    <div class="search-result-summary">
+                        <h2 class="search-header">Search timed out, try again in a second</h2>
+                    </div>
+                {% elif untradable %}
+                    <div class="search-result-summary">
+                        <img class="item-icon" src="{{item_icon_url}}" alt="{{searched_item}}">
+                        <h2 class="search-header">{{searched_item}} is untradable on the market.</h2>
+                    </div>
+                {% elif search_error %}
+                    <div class="search-result-summary">
+                        <h2 class="search-header">There was an error. Code: {{status_code}}</h2>
+                    </div>
+                {% elif failed_search %} 
+                    <div class="search-result-summary">
+                        <h2 class="search-header">Couldn't find any results for: {{searched_item}}</h2>
+                    </div>
+                {% elif searched_item and searched_world %}
+                    <div class="search-result-summary">
+                        <img class="item-icon" src="{{item_icon_url}}" alt="{{searched_item}}">
+                        <h2 class="search-header">{{searched_item}} ({{searched_world}})</h2>
+                    </div>
+
+                    <div class="tables">
+                        <div class="current-listings-section">
+                            <h3 class="search-results-header">Current Listings</h3>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>{{purchase["pricePerUnit"]}}</td>
-                                        <td>{{purchase["quantity"]}}</td>
-                                        <td>{{purchase["hq"]}}</td>
-                                        <td>{{purchase["timestamp"]}}</td>
-                                        <td>{{purchase["buyerName"]}}</td>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>HQ</th>
+                                        <th>Seller Name</th>
                                         {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                            <td>{{purchase["worldName"]}}</td>
+                                            <th>World</th>
                                         {% endif %}
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {% for listing in item_current_listings %}
+                                    <tr>
+                                        <td>{{listing["pricePerUnit"]}}</td>
+                                        <td>{{listing["quantity"]}}</td>
+                                        <td>{{listing["hq"]}}</td>
+                                        <td>{{listing["retainerName"]}}</td>
+                                        {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                            <td>{{listing["worldName"]}}</td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="sale-history-section" data-item="{{searched_item}}" data-item-id="{{item_id}}" data-world="{{searched_world}}">
+                            <h3 class="search-results-header">Sale History</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>HQ</th>
+                                        <th>Date/Time</th>
+                                        <th>Buyer Name</th>
+                                        {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                            <th>World</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
 
-                        <button id="expand-history-results">▼ Expand Results</button>
-                        <p id="expanded-search-error-message"></p>
+                                <tbody id="sale-history-body">
+                                    {% for purchase in item_recent_history %}
+                                        <tr>
+                                            <td>{{purchase["pricePerUnit"]}}</td>
+                                            <td>{{purchase["quantity"]}}</td>
+                                            <td>{{purchase["hq"]}}</td>
+                                            <td>{{purchase["timestamp"]}}</td>
+                                            <td>{{purchase["buyerName"]}}</td>
+                                            {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                                <td>{{purchase["worldName"]}}</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <button id="expand-history-results">▼ Expand Results</button>
+                            <p id="expanded-search-error-message"></p>
+                        </div>
                     </div>
-                </div>
-            {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
     <script src="../static/script.js"></script>
 </body>
