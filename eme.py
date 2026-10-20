@@ -3,6 +3,8 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import requests
 import random
+from time import perf_counter
+
 
 app = Flask(__name__)
 
@@ -56,11 +58,13 @@ def inject_random_item_status():
 
 
 try:
+    start = perf_counter()
     response = requests.get(
         "https://universalis.app/api/v2/marketable",
         timeout=10
     )
     response.raise_for_status()
+    print(f"Request took {perf_counter() - start:.3f} seconds")
 
     marketable_item_ids = response.json()
     random_item_available = len(marketable_item_ids) > 0
@@ -84,19 +88,22 @@ def format_hq(entries):
 
 def get_market_data(item_id, world):
     try:
+        start = perf_counter()
         item_data = requests.get(
             f"https://v2.xivapi.com/api/sheet/Item/{item_id}",
             timeout=10
         )
+        print(f"XIVAPI item sheet request took {perf_counter() - start:.3f} seconds")
         item_data.raise_for_status()
         item_data = item_data.json()
-
+        
+        start = perf_counter()
         item_icon_url = requests.get(
             "https://v2.xivapi.com/api/asset",
             params={"path": item_data["fields"]["Icon"]["path"], "format": "png"},
             timeout=10
         ).url
-
+        print(f"XIVAPI asset (image) request took {perf_counter() - start:.3f} seconds")
         if item_data["fields"]["IsUntradable"]:
             return {
                 "untradable": True,
@@ -104,11 +111,12 @@ def get_market_data(item_id, world):
                 "searched_world": world,
                 "item_icon_url": item_icon_url,
             }
-
+        start = perf_counter()
         universalis_response = requests.get(
             f"https://universalis.app/api/v2/{world}/{item_id}",
             timeout=10
         )
+        print(f"Universalis request took {perf_counter() - start:.3f} seconds")
 
         if universalis_response.status_code != 200:
             return {
@@ -159,6 +167,7 @@ def search():
         )
 
     try:
+        start = perf_counter()
         response = requests.get(
             "https://v2.xivapi.com/api/search",
             params={
@@ -169,6 +178,7 @@ def search():
         )
         response.raise_for_status()
         ffxivapi_response_data = response.json()
+        print(f"XIVAPI search request took {perf_counter() - start:.3f} seconds")
 
     except requests.exceptions.Timeout:
         return render_template("index.html", timeout=True)
@@ -198,7 +208,9 @@ def expand_results():
     searched_world = request.args["world"]
     print("Flask received the request!")
     try:
+        start = perf_counter()
         expanded_search = requests.get(f"https://universalis.app/api/v2/{searched_world}/{searched_item_id}", params={"entries": 20}, timeout=10)
+        print(f"Universalis request took {perf_counter() - start:.3f} seconds")
     except requests.exceptions.Timeout:
         return jsonify({
             "timeout": True,
