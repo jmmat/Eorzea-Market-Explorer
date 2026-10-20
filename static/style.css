@@ -22,6 +22,10 @@
     font-display: swap;
 }
 
+@view-transition {
+    navigation: auto;
+}
+
 :root {
     --eme-navy: #101827;
     --eme-panel: #192438;
