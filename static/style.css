@@ -43,7 +43,7 @@ html {
   background-color: var(--eme-navy);
   background-image:
       linear-gradient(rgba(16, 24, 39, 0.45), rgba(16, 24, 39, 0.65)),
-      url("images/limsa.jpeg");
+      url("images/limsa.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -54,7 +54,6 @@ body {
   margin: 0;
   position: relative;
   isolation: isolate;
-  background: var(--eme-navy);
   background: transparent;
   min-height: 100vh;
 }
@@ -90,10 +89,6 @@ h2 {
   font-family: 'Marcellus', serif;
   font-weight: 400;
   letter-spacing: 0.02em;
-}
-
-body {
-  background-color: var(--eme-navy);
 }
 
 td, th {
