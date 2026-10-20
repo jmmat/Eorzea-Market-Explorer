@@ -45,7 +45,7 @@ body {
 .background-image {
   position: fixed;
   inset: -20px;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 
   background:
@@ -75,7 +75,7 @@ h2 {
 }
 
 body {
-  background-color: red;
+  background-color: var(--eme-navy);
 }
 
 td, th {
@@ -324,3 +324,9 @@ th {
     transform: rotate(45deg);
 }
 
+.site-header,
+.intro-section,
+.market-content {
+    position: relative;
+    z-index: 1;
+}
