@@ -39,17 +39,31 @@
     --eme-radius: 12px;
 }
 
+html {
+  background-color: var(--eme-navy);
+  background-image:
+      linear-gradient(rgba(16, 24, 39, 0.45), rgba(16, 24, 39, 0.65)),
+      url("images/limsa.jpeg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 body {
   margin: 0;
   position: relative;
   isolation: isolate;
   background: var(--eme-navy);
+  background: transparent;
+  min-height: 100vh;
 }
 
 .background-image {
+  display: none;
   position: fixed;
   inset: -20px;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
 
   background:
@@ -304,33 +318,3 @@ th {
   font-weight: 500;
 }
 
-
-.intro-divider {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: min(420px, 80%);
-    margin: 1.75rem auto;
-}
-
-.intro-divider span:first-child,
-.intro-divider span:last-child {
-    flex: 1;
-    height: 1px;
-    background-color: var(--eme-gold);
-    opacity: 0.8;
-}
-
-.intro-divider .divider-diamond {
-    width: 7px;
-    height: 7px;
-    background-color: var(--eme-gold);
-    transform: rotate(45deg);
-}
-
-.site-header,
-.intro-section,
-.market-content {
-    position: relative;
-    z-index: 1;
-}
