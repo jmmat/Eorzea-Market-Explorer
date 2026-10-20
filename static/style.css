@@ -45,6 +45,7 @@ html {
 body {
   margin: 0;
   position: relative;
+  isolation: isolate;
   background-color: var(--eme-navy);
   min-height: 100vh;
 }
