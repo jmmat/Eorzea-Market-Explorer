@@ -247,25 +247,29 @@ def random_item():
 
 @app.route("/flash-test")
 def flash_test():
-    return """
+    use_isolation = request.args.get("isolate") == "1"
+
+    isolation_style = "isolation: isolate;" if use_isolation else ""
+
+    return f"""
     <!DOCTYPE html>
     <html>
     <head>
         <meta name="color-scheme" content="dark">
         <style>
-            html, body {
+            html, body {{
                 margin: 0;
                 min-height: 100%;
                 background-color: #101827;
                 color: #e9eef7;
-            }
+            }}
+
+            body {{
+                {isolation_style}
+            }}
         </style>
-        <link rel="stylesheet" href="/static/style.css">
-        <link rel="icon" href="/static/images/ffxivfavicon.png">
     </head>
     <body>
-        <div class="background-image"></div>
-
         <h1>EME Background Test</h1>
         <p>Testing Firefox page reloads.</p>
     </body>
