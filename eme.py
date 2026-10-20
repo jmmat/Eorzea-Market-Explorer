@@ -261,6 +261,7 @@ def flash_test():
             }
         </style>
         <link rel="stylesheet" href="/static/style.css">
+        <link rel="icon" href="/static/images/ffxivfavicon.png">
     </head>
     <body>
         <div class="background-image"></div>
