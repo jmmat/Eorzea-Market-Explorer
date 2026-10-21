@@ -294,8 +294,9 @@ def flash_test2():
                 color: #e9eef7;
             }}
             
-            h1 {{
-                font-size: 100px;
+            h1, p {{
+                position: relative;
+                z-index: 1;
             }}
         </style>
         <link rel="icon" href="/static/images/ffxivfavicon.png">
