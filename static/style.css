@@ -44,7 +44,7 @@ body {
   background-color: var(--eme-navy);
   min-height: 100vh;
 }
-/*
+
 .background-image {
   position: fixed;
   inset: -20px;
@@ -61,8 +61,8 @@ body {
   filter: blur(8px);
   transform: scale(1.02);
 }
-*/
 
+/*
 .background-image {
     position: absolute;
     inset: 0;
@@ -71,6 +71,7 @@ body {
 
     background-color: red;
 }
+*/
 
 h1 {
   text-align: left;
