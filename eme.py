@@ -303,6 +303,7 @@ def flash_test2():
                 font-size: 3.5rem;
             }}
         </style>
+        <link rel="preload" as="image" href="/static/images/limsa.jpg">
         <link rel="icon" href="/static/images/ffxivfavicon.png">
         <link rel="stylesheet" href="/static/style.css">
     </head>
