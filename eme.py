@@ -252,6 +252,7 @@ def flash_test():
     <!DOCTYPE html>
     <html>
     <head>
+        <meta charset="UTF-8">
         <meta name="color-scheme" content="dark">
 
         <style>
@@ -281,6 +282,7 @@ def flash_test2():
     <!DOCTYPE html>
     <html>
     <head>
+        <meta charset="UTF-8">
         <meta name="color-scheme" content="dark">
 
         <style>
