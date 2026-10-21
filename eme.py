@@ -299,7 +299,7 @@ def flash_test2():
             }}
         </style>
         <link rel="icon" href="/static/images/ffxivfavicon.png">
-        <link rel="stylesheet" href="/static/flash-test.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
         <div class="background-image">
