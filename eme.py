@@ -292,7 +292,7 @@ def flash_test2():
             }}
         </style>
         <link rel="icon" href="/static/images/ffxivfavicon.png">
-        <!-- <link rel="stylesheet" href="/static/style.css"> -->
+        <link rel="stylesheet" href="/static/flash-test.css">
     </head>
     <body>
         <h1>EME Background Test</h1>
