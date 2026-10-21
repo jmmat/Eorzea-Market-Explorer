@@ -275,7 +275,7 @@ def flash_test():
     """
 
 @app.route("/flash-test2")
-def flash_test():
+def flash_test2():
 
     return f"""
     <!DOCTYPE html>
