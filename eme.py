@@ -291,7 +291,6 @@ def flash_test2():
             html, body {{
                 margin: 0;
                 min-height: 100%;
-                background-color: #101827;
                 color: #e9eef7;
             }}
             
