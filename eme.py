@@ -262,6 +262,10 @@ def flash_test():
                 background-color: #101827;
                 color: #e9eef7;
             }}
+            
+            h1 {{
+                font-size: 3.5rem;
+            }}
         </style>
         <link rel="icon" href="/static/images/ffxivfavicon.png">
         <link rel="stylesheet" href="/static/style.css">
