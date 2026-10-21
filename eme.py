@@ -307,7 +307,7 @@ def flash_test2():
         <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
-        <div class="background-image"></div>
+        <div class="background-image" style="background: #a34040;"></div>
 
         <h1>EME Background Test</h1>
         <p>Testing Firefox page reloads.</p>
