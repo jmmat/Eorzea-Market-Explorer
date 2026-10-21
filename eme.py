@@ -298,6 +298,10 @@ def flash_test2():
                 position: relative;
                 z-index: 1;
             }}
+            
+            h1 {{
+                font-size: 3.5rem;
+            }}
         </style>
         <link rel="icon" href="/static/images/ffxivfavicon.png">
         <link rel="stylesheet" href="/static/style.css">
