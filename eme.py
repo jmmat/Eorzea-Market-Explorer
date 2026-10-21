@@ -302,12 +302,10 @@ def flash_test2():
         <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
-        <body>
-            <div class="background-image"></div>
+        <div class="background-image"></div>
 
-            <h1>EME Background Test</h1>
-            <p>Testing Firefox page reloads.</p>
-        </body>
+        <h1>EME Background Test</h1>
+        <p>Testing Firefox page reloads.</p>
     </body>
     </html>
     """
