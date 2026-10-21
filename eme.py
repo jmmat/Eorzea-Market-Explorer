@@ -274,5 +274,32 @@ def flash_test():
     </html>
     """
 
+@app.route("/flash-test2")
+def flash_test():
+
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta name="color-scheme" content="dark">
+
+        <style>
+            html, body {{
+                margin: 0;
+                min-height: 100%;
+                background-color: #101827;
+                color: #e9eef7;
+            }}
+        </style>
+        <link rel="icon" href="/static/images/ffxivfavicon.png">
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+        <h1>EME Background Test</h1>
+        <p>Testing Firefox page reloads.</p>
+    </body>
+    </html>
+    """
+
 if __name__ == "__main__":
     app.run()
