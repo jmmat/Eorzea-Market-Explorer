@@ -106,6 +106,8 @@ th {
 }
 
 .market-content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -124,6 +126,8 @@ th {
 }
 
 .intro-section {
+  position: relative;
+  z-index: 1;
   text-align: center;
   font-family: 'Inter', sans-serif;
   color: var(--eme-text);
@@ -137,6 +141,29 @@ th {
   font-family: 'Marcellus', serif;
   font-size: 2rem;
   color: var(--eme-text);
+}
+
+.intro-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: min(420px, 80%);
+    margin: 1.75rem auto;
+}
+
+.intro-divider span:first-child,
+.intro-divider span:last-child {
+    flex: 1;
+    height: 1px;
+    background-color: var(--eme-gold);
+    opacity: 0.8;
+}
+
+.intro-divider .divider-diamond {
+    width: 7px;
+    height: 7px;
+    background-color: var(--eme-gold);
+    transform: rotate(45deg);
 }
 
 .site-header {
@@ -310,3 +337,22 @@ th {
   font-weight: 500;
 }
 
+
+/* Search and Surprise Me replace only .market-content; the background stays mounted. */
+.request-status {
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: var(--eme-muted);
+}
+
+.request-status:empty {
+  display: none;
+}
+
+#submit-button:disabled,
+#random-item-button:disabled,
+#expand-history-results:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}

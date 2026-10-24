@@ -56,6 +56,12 @@ def inject_random_item_status():
     }
 
 
+def render_market_page(**context):
+    """Return a full page for normal visits, or just the market panel for fetch()."""
+    partial = request.headers.get("EME-Partial") == "1"
+    return render_template("index.html", partial=partial, **context)
+
+
 
 try:
     start = perf_counter()
@@ -152,7 +158,7 @@ def get_market_data(item_id, world):
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_market_page()
 
 
 @app.route("/search")
@@ -161,8 +167,7 @@ def search():
     searched_world = request.args.get("world", "")
 
     if not searched_item:
-        return render_template(
-            "index.html",
+        return render_market_page(
             searched_world=searched_world
         )
 
@@ -181,15 +186,14 @@ def search():
         print(f"XIVAPI search request took {perf_counter() - start:.3f} seconds")
 
     except requests.exceptions.Timeout:
-        return render_template("index.html", timeout=True)
+        return render_market_page(timeout=True)
 
     except requests.exceptions.RequestException as error:
         print(f"XIVAPI search failed: {error}")
-        return render_template("index.html", search_error=True)
+        return render_market_page(search_error=True)
 
     if not ffxivapi_response_data["results"]:
-        return render_template(
-            "index.html",
+        return render_market_page(
             failed_search=True,
             searched_item=searched_item.title(),
             searched_world=searched_world
@@ -199,7 +203,7 @@ def search():
 
     result = get_market_data(item_id, searched_world)
 
-    return render_template("index.html", **result)
+    return render_market_page(**result)
 
 
 @app.route("/expand-results")
@@ -237,12 +241,15 @@ def expand_results():
 
 @app.route("/random")
 def random_item():
+    if not marketable_item_ids:
+        return render_market_page(random_unavailable=True)
+
     random_item_id = random.choice(marketable_item_ids)
     random_world = random.choice(WORLDS)
 
     result = get_market_data(random_item_id, random_world)
 
-    return render_template("index.html", **result)
+    return render_market_page(**result)
 
 
 @app.route("/flash-test")

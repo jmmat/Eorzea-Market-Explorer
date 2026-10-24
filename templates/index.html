@@ -1,3 +1,4 @@
+{% if not partial %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +11,7 @@
             color: #e9eef7;
         }
     </style>
+    <link rel="preload" as="image" href="{{ url_for('static', filename='images/limsa.jpg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/ffxivfavicon.png') }}">
 </head>
@@ -38,6 +40,7 @@
         {% endif %}
     </section>
 
+{% endif %}
     <div class="market-content">
         <form class="search-form" action="/search" method="get">
 
@@ -65,7 +68,8 @@
             </div>
 
         </form>
-        {% if timeout or search_error or failed_search or (searched_item and searched_world) %}
+        <p class="request-status" role="status" aria-live="polite"></p>
+        {% if timeout or search_error or failed_search or random_unavailable or (searched_item and searched_world) %}
             <div class="item-data-section">
                 {% if timeout %}
                     <div class="search-result-summary">
@@ -78,7 +82,11 @@
                     </div>
                 {% elif search_error %}
                     <div class="search-result-summary">
-                        <h2 class="search-header">There was an error. Code: {{status_code}}</h2>
+                        <h2 class="search-header">There was an error{% if status_code %}. Code: {{status_code}}{% endif %}. Try again in a moment.</h2>
+                    </div>
+                {% elif random_unavailable %}
+                    <div class="search-result-summary">
+                        <h2 class="search-header">Random items are temporarily unavailable. Please try a search.</h2>
                     </div>
                 {% elif failed_search %} 
                     <div class="search-result-summary">
@@ -160,6 +168,8 @@
             </div>
         {% endif %}
     </div>
-    <script src="../static/script.js"></script>
+{% if not partial %}
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
+{% endif %}
