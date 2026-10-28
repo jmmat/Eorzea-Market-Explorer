@@ -101,67 +101,76 @@
                     <div class="tables">
                         <div class="current-listings-section">
                             <h3 class="search-results-header">Current Listings</h3>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>HQ</th>
-                                        <th>Seller Name</th>
-                                        {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                            <th>World</th>
-                                        {% endif %}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for listing in item_current_listings %}
-                                    <tr>
-                                        <td>{{listing["pricePerUnit"]}}</td>
-                                        <td>{{listing["quantity"]}}</td>
-                                        <td>{{listing["hq"]}}</td>
-                                        <td>{{listing["retainerName"]}}</td>
-                                        {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                            <td>{{listing["worldName"]}}</td>
-                                        {% endif %}
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="sale-history-section" data-item="{{searched_item}}" data-item-id="{{item_id}}" data-world="{{searched_world}}">
-                            <h3 class="search-results-header">Sale History</h3>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>HQ</th>
-                                        <th>Date/Time</th>
-                                        <th>Buyer Name</th>
-                                        {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                            <th>World</th>
-                                        {% endif %}
-                                    </tr>
-                                </thead>
-
-                                <tbody id="sale-history-body">
-                                    {% for purchase in item_recent_history %}
+                            {% if not item_current_listings %}
+                                <p class="no-results-message">No current listings found.</p>
+                            {% else %}
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <td>{{purchase["pricePerUnit"]}}</td>
-                                            <td>{{purchase["quantity"]}}</td>
-                                            <td>{{purchase["hq"]}}</td>
-                                            <td>{{purchase["timestamp"]}}</td>
-                                            <td>{{purchase["buyerName"]}}</td>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>HQ</th>
+                                            <th>Seller Name</th>
                                             {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                                <td>{{purchase["worldName"]}}</td>
+                                                <th>World</th>
                                             {% endif %}
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {% for listing in item_current_listings %}
+                                        <tr>
+                                            <td>{{listing["pricePerUnit"]}}</td>
+                                            <td>{{listing["quantity"]}}</td>
+                                            <td>{{listing["hq"]}}</td>
+                                            <td>{{listing["retainerName"]}}</td>
+                                            {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                                <td>{{listing["worldName"]}}</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        </div>
 
-                            <button id="expand-history-results">▼ Expand Results</button>
-                            <p id="expanded-search-error-message"></p>
+                        <div class="sale-history-section" data-item="{{searched_item}}" data-item-id="{{item_id}}" data-world="{{searched_world}}">
+                            <h3 class="search-results-header">Sale History</h3>
+                            {% if not item_recent_history %}
+                                <p class="no-results-message">No recent sale history found.</p>
+                            {% else %}
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>HQ</th>
+                                            <th>Date/Time</th>
+                                            <th>Buyer Name</th>
+                                            {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                                <th>World</th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="sale-history-body">
+                                        {% for purchase in item_recent_history %}
+                                            <tr>
+                                                <td>{{purchase["pricePerUnit"]}}</td>
+                                                <td>{{purchase["quantity"]}}</td>
+                                                <td>{{purchase["hq"]}}</td>
+                                                <td>{{purchase["timestamp"]}}</td>
+                                                <td>{{purchase["buyerName"]}}</td>
+                                                {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                                    <td>{{purchase["worldName"]}}</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <button id="expand-history-results">▼ Expand Results</button>
+                                <p id="expanded-search-error-message"></p>
+                            {% endif %}
                         </div>
                     </div>
                 {% endif %}

@@ -62,17 +62,6 @@ body {
   transform: scale(1.02);
 }
 
-/*
-.background-image {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-
-    background-color: red;
-}
-*/
-
 h1 {
   text-align: left;
   font-size: 3.5rem;
@@ -271,6 +260,12 @@ th {
   margin: 0 6px;
 }
 
+.no-results-message {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: var(--eme-muted);
+}
+
 #input-query,
 #world,
 #submit-button {
@@ -337,8 +332,6 @@ th {
   font-weight: 500;
 }
 
-
-/* Search and Surprise Me replace only .market-content; the background stays mounted. */
 .request-status {
   margin: 0 auto;
   text-align: center;
