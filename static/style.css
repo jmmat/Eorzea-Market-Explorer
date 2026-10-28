@@ -251,6 +251,29 @@ th {
   flex-direction: row;
 }
 
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+  .tables {
+    flex-direction: column;
+  }
+
+  .search-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #input-query,
+  #world,
+  #submit-button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 .current-listings-section,
 .sale-history-section {
   display: flex;
@@ -258,6 +281,7 @@ th {
   flex: 1;
   padding: 6px;
   margin: 0 6px;
+  min-width: 0;
 }
 
 .no-results-message {

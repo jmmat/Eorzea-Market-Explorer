@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="color-scheme" content="dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eorzea Market Explorer</title>
     <style>
         html, body {
@@ -104,32 +105,34 @@
                             {% if not item_current_listings %}
                                 <p class="no-results-message">No current listings found.</p>
                             {% else %}
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Price</th>
-                                            <th>Quantity</th>
-                                            <th>HQ</th>
-                                            <th>Seller Name</th>
-                                            {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                                <th>World</th>
-                                            {% endif %}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for listing in item_current_listings %}
-                                        <tr>
-                                            <td>{{listing["pricePerUnit"]}}</td>
-                                            <td>{{listing["quantity"]}}</td>
-                                            <td>{{listing["hq"]}}</td>
-                                            <td>{{listing["retainerName"]}}</td>
-                                            {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                                <td>{{listing["worldName"]}}</td>
-                                            {% endif %}
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                                <div class="table-scroll">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>HQ</th>
+                                                <th>Seller Name</th>
+                                                {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                                    <th>World</th>
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for listing in item_current_listings %}
+                                            <tr>
+                                                <td>{{listing["pricePerUnit"]}}</td>
+                                                <td>{{listing["quantity"]}}</td>
+                                                <td>{{listing["hq"]}}</td>
+                                                <td>{{listing["retainerName"]}}</td>
+                                                {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                                    <td>{{listing["worldName"]}}</td>
+                                                {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             {% endif %}
                         </div>
 
@@ -138,38 +141,40 @@
                             {% if not item_recent_history %}
                                 <p class="no-results-message">No recent sale history found.</p>
                             {% else %}
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Price</th>
-                                            <th>Quantity</th>
-                                            <th>HQ</th>
-                                            <th>Date/Time</th>
-                                            <th>Buyer Name</th>
-                                            {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                                <th>World</th>
-                                            {% endif %}
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="sale-history-body">
-                                        {% for purchase in item_recent_history %}
+                                <div class="table-scroll">
+                                    <table>
+                                        <thead>
                                             <tr>
-                                                <td>{{purchase["pricePerUnit"]}}</td>
-                                                <td>{{purchase["quantity"]}}</td>
-                                                <td>{{purchase["hq"]}}</td>
-                                                <td>{{purchase["timestamp"]}}</td>
-                                                <td>{{purchase["buyerName"]}}</td>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>HQ</th>
+                                                <th>Date/Time</th>
+                                                <th>Buyer Name</th>
                                                 {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
-                                                    <td>{{purchase["worldName"]}}</td>
+                                                    <th>World</th>
                                                 {% endif %}
                                             </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                                        </thead>
 
-                                <button id="expand-history-results">▼ Expand Results</button>
-                                <p id="expanded-search-error-message"></p>
+                                        <tbody id="sale-history-body">
+                                            {% for purchase in item_recent_history %}
+                                                <tr>
+                                                    <td>{{purchase["pricePerUnit"]}}</td>
+                                                    <td>{{purchase["quantity"]}}</td>
+                                                    <td>{{purchase["hq"]}}</td>
+                                                    <td>{{purchase["timestamp"]}}</td>
+                                                    <td>{{purchase["buyerName"]}}</td>
+                                                    {% if searched_world in ["Primal", "Aether", "Crystal", "Dynamis"] %}
+                                                        <td>{{purchase["worldName"]}}</td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                    <button id="expand-history-results">▼ Expand Results</button>
+                                    <p id="expanded-search-error-message"></p>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
