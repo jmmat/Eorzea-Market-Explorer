@@ -414,4 +414,9 @@ th {
     width: 100%;
     align-self: stretch;
   }
+
+  .background-image {
+    bottom: auto;
+    height: calc(100lvh + 40px);
+  }
 }
