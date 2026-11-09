@@ -387,6 +387,10 @@ th {
     gap: 1rem;
   }
 
+  .search-result-summary {
+    width: 50%;
+  }
+
   #input-query {
     grid-column: 1 / -1;
     flex: none;
