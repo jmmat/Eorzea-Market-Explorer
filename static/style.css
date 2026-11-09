@@ -270,6 +270,11 @@ th {
   min-width: 0;
 }
 
+.sale-history-content {
+  display: flex;
+  flex-direction: column;
+}
+
 .no-results-message {
   text-align: center;
   font-family: 'Inter', sans-serif;
@@ -318,6 +323,8 @@ th {
 #expand-history-results {
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
+  width: 100%;
+  align-self: stretch;
 }
 
 #random-item-button {
@@ -360,6 +367,10 @@ th {
   cursor: wait;
 }
 
+#expand-history-results {
+  align-self: center;
+}
+
 @media (max-width: 800px) {
   .tables {
     flex-direction: column;
@@ -371,11 +382,13 @@ th {
   }
 
   .search-controls {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
   }
 
   #input-query {
+    grid-column: 1 / -1;
     flex: none;
   }
 
@@ -385,14 +398,16 @@ th {
     width: 100%;
     min-width: 0;
     align-self: center;
-
   }
 
-  #world {
-    width: 40%;
+  .sale-history-content {
+    width: max-content;
+    max-width: 100%;
+    align-self: center;
   }
 
-  #submit-button {
-    width: 30%;
+  #expand-history-results {
+    width: 100%;
+    align-self: stretch;
   }
 }
